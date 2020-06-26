@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  jpug-doc-web:
+    build:
+      context: ./docker/jpug-doc-web
+    container_name: jpug-doc-web
+    hostname: jpug-doc-web
+    ports:
+      - "1080:1080"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  fess:
+   build:
+     context: ./docker/fess
+   container_name: fess
+   hostname: fess
+   depends_on:
+     - jpug-doc-web
+   ports:
+     - "8080:8080"
+   environment:
+     - "ES_JAVA_OPTS='-Xms512m -Xmx2g'"
+   logging:
+     driver: "json-file"
+     options:
+       max-size: "10m"
+       max-file: "3"
